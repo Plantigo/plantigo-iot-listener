@@ -1,3 +1,4 @@
+import json
 import logging
 from dataclasses import asdict
 
@@ -5,8 +6,10 @@ from app.core.handlers.sensors.models import TelemetryData
 
 
 class SensorDataHandler:
-    def __init__(self, db):
+    def __init__(self, db, redis_client):
         self.db = db
+        self.redis_client = redis_client
+
         self.logger = logging.getLogger("SensorDataHandler")
 
     def handle(self, topic: str, variables: tuple, payload: str):
@@ -15,6 +18,8 @@ class SensorDataHandler:
             telemetry = TelemetryData.from_payload(mac_address, payload)
 
             self.db.save(asdict(telemetry))
+            self.redis_client.rpush("telemetry_queue", json.dumps(asdict(telemetry)))
+
             self.logger.info(f"Telemetry data saved: {telemetry}")
 
         except ValueError as e:

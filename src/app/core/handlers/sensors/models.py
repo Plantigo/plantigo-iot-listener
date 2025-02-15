@@ -16,16 +16,16 @@ class TelemetryData:
     def from_payload(cls, mac_address: str, payload: str):
         try:
             data = json.loads(payload)
-            required_keys = ["sensor1", "sensor2", "sensor3", "sensor4"]
+            required_keys = ["temperature", "humidity", "pressure", "light"]
             if not all(key in data for key in required_keys):
                 raise KeyError(f"Missing keys in payload: {payload}")
 
             return cls(
                 mac_address=mac_address,
-                temperature=data["sensor1"],
-                humidity=data["sensor2"],
-                pressure=data["sensor3"],
-                soil_moisture=data["sensor4"],
+                temperature=data["temperature"],
+                humidity=data["humidity"],
+                pressure=data["pressure"],
+                soil_moisture=data["light"],
                 timestamp=datetime.datetime.utcnow().isoformat(),
             )
         except json.JSONDecodeError as e:
