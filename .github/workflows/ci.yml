@@ -3,7 +3,7 @@ name: Deploy Plantigo Iot Listener
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
