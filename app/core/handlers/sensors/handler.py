@@ -17,9 +17,10 @@ class SensorDataHandler:
             mac_address = variables[0]
             telemetry = TelemetryData.from_payload(mac_address, payload)
 
-            self.db.save(asdict(telemetry))
-            self.redis_client.rpush(str(mac_address), json.dumps(asdict(telemetry)))
 
+            print(str(mac_address), json.dumps(asdict(telemetry)))
+            self.redis_client.rpush(str(mac_address), json.dumps(asdict(telemetry)))
+            # self.db.save(asdict(telemetry))
             self.logger.info(f"Telemetry data saved: {telemetry}")
 
         except ValueError as e:
