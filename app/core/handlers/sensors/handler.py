@@ -18,7 +18,7 @@ class SensorDataHandler:
             telemetry = TelemetryData.from_payload(mac_address, payload)
 
             self.db.save(asdict(telemetry))
-            self.redis_client.rpush("telemetry_queue", json.dumps(asdict(telemetry)))
+            self.redis_client.rpush(str(mac_address), json.dumps(asdict(telemetry)))
 
             self.logger.info(f"Telemetry data saved: {telemetry}")
 
